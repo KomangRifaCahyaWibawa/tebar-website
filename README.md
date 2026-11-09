@@ -94,11 +94,8 @@ Pelapor dapat memilih platform yang ingin digunakan untuk dihubungi.
 Platform yang didukung antara lain:
 
 - WhatsApp
-- Telegram
-- Instagram
-- LINE
+- Nomor Telepon
 - Email
-- Kontak lainnya
 
 Hanya platform kontak yang dipilih oleh pelapor yang akan ditampilkan
 pada laporan.
