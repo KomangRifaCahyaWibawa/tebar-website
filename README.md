@@ -119,8 +119,8 @@ detail laporan.
 
 ```bash
 # clone repositori
-git clone https://github.com/<username>/<nama-repo>.git
-cd <nama-repo>
+git clone https://github.com/KomangRifaCahyaWibawa/tebar-website.git
+cd tebar-website
 
 # pasang dependensi
 pnpm install
