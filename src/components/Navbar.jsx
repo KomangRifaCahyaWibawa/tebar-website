@@ -1,21 +1,43 @@
-import { useState } from 'react'
-import { Link, NavLink } from 'react-router-dom'
+import { useEffect, useRef, useState } from 'react'
+import { Link, NavLink, useLocation } from 'react-router-dom'
 import LogoTebar from '../assets/logotebar.svg'
+import { scrollToTop } from '../lib/scroll'
 
 const navLinks = [
-  { to: '/', label: 'Beranda', end: true },
+  { to: '/', label: 'Beranda', end: true, isHome: true },
   { to: '/laporan', label: 'Cari Barang' },
   { to: '/laporan-saya', label: 'Laporan Saya' },
 ]
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
+  const location = useLocation()
+  const pendingHomeScrollRef = useRef(false)
   const closeMenu = () => setMenuOpen(false)
+
+  function handleHomeClick(event) {
+    closeMenu()
+
+    if (location.pathname === '/') {
+      event.preventDefault()
+      scrollToTop()
+      return
+    }
+
+    pendingHomeScrollRef.current = true
+  }
+
+  useEffect(() => {
+    if (pendingHomeScrollRef.current && location.pathname === '/') {
+      pendingHomeScrollRef.current = false
+      scrollToTop()
+    }
+  }, [location])
 
   return (
     <header className="site-header">
       <div className="container site-header-inner">
-        <Link to="/" className="brand" onClick={closeMenu}>
+        <Link to="/" className="brand" onClick={handleHomeClick}>
           <img src={LogoTebar} alt = "Logo Tebar" className="navbar-logo"></img>
         </Link>
 
@@ -39,7 +61,7 @@ export default function Navbar() {
               to={link.to}
               end={link.end}
               className="site-nav-link"
-              onClick={closeMenu}
+              onClick={link.isHome ? handleHomeClick : closeMenu}
             >
               {link.label}
             </NavLink>

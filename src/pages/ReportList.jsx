@@ -90,8 +90,8 @@ export default function ReportList() {
         </div>
       ) : (
         <div className="report-grid">
-          {filteredReports.map((report) => (
-            <ReportCard key={report.id} report={report} />
+          {filteredReports.map((report, index) => (
+            <ReportCard key={report.id} report={report} index={index} />
           ))}
         </div>
       )}

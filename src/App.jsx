@@ -1,7 +1,8 @@
-import { Link, Route, Routes } from 'react-router-dom'
+import { Link, Route, Routes, useLocation } from 'react-router-dom'
 import Footer from './components/Footer'
 import Navbar from './components/Navbar'
 import CreateReport from './pages/CreateReport'
+import EditReport from './pages/EditReport'
 import Home from './pages/Home'
 import MyReports from './pages/MyReports'
 import ReportDetail from './pages/ReportDetail'
@@ -21,19 +22,24 @@ function NotFoundPage() {
 }
 
 export default function App() {
+  const location = useLocation()
+
   return (
     <ReportsProvider>
       <div className="app-shell">
         <Navbar />
         <main className="site-main">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/laporan" element={<ReportList />} />
-            <Route path="/laporkan" element={<CreateReport />} />
-            <Route path="/laporan/:id" element={<ReportDetail />} />
-            <Route path="/laporan-saya" element={<MyReports />} />
-            <Route path="*" element={<NotFoundPage />} />
-          </Routes>
+          <div className="page-transition" key={location.pathname}>
+            <Routes>
+              <Route path="/" element={<Home />} />
+              <Route path="/laporan" element={<ReportList />} />
+              <Route path="/laporkan" element={<CreateReport />} />
+              <Route path="/laporan/:id" element={<ReportDetail />} />
+              <Route path="/laporan/:id/edit" element={<EditReport />} />
+              <Route path="/laporan-saya" element={<MyReports />} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </div>
         </main>
         <Footer />
       </div>
