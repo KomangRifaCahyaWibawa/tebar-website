@@ -23,8 +23,16 @@ export default function ReportsProvider({ children }) {
     saveUserReports(nextUserReports)
   }
 
+  function updateReport(id, changes) {
+    const nextUserReports = userReports.map((report) =>
+      report.id === id ? { ...report, ...changes, id: report.id } : report,
+    )
+    setUserReports(nextUserReports)
+    saveUserReports(nextUserReports)
+  }
+
   return (
-    <ReportsContext.Provider value={{ reports, addReport, removeReport }}>
+    <ReportsContext.Provider value={{ reports, addReport, removeReport, updateReport }}>
       {children}
     </ReportsContext.Provider>
   )

@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom'
 import StatusBadge from '../components/StatusBadge'
+import StatusActions from '../components/StatusActions'
 import { getCategoryLabel } from '../data/categories'
 import { useReports } from '../context/useReports'
 import { formatDate } from '../lib/formatDate'
 
 export default function MyReports() {
-  const { reports, removeReport } = useReports()
+  const { reports, removeReport, updateReport } = useReports()
 
   const myReports = reports.filter((report) => report.id.startsWith('user-'))
 
@@ -45,7 +46,14 @@ export default function MyReports() {
                 </p>
               </div>
               <div className="my-report-actions">
-                <StatusBadge status={report.status} />
+                <StatusBadge status={report.status} key={report.status} />
+                <StatusActions
+                  report={report}
+                  onUpdateStatus={(status) => updateReport(report.id, { status })}
+                />
+                <Link to={`/laporan/${report.id}/edit`} className="btn btn-secondary btn-sm">
+                  Edit Laporan
+                </Link>
                 <button type="button" className="btn btn-danger" onClick={() => handleRemove(report)}>
                   Hapus
                 </button>

@@ -34,8 +34,8 @@ export default function Home() {
           </Link>
         </div>
         <div className="report-grid">
-          {latestReports.map((report) => (
-            <ReportCard key={report.id} report={report} />
+          {latestReports.map((report, index) => (
+            <ReportCard key={report.id} report={report} index={index} />
           ))}
         </div>
       </div>

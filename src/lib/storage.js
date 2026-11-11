@@ -12,6 +12,7 @@ export function loadUserReports() {
 export function saveUserReports(reports) {
   try {
     window.localStorage.setItem(STORAGE_KEY, JSON.stringify(reports))
+  // eslint-disable-next-line no-empty
   } catch {
     
   }

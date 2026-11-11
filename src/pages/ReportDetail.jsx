@@ -1,5 +1,6 @@
 import { Link, useParams } from 'react-router-dom'
 import StatusBadge from '../components/StatusBadge'
+import StatusActions from '../components/StatusActions'
 import { getCategoryLabel } from '../data/categories'
 import { useReports } from '../context/useReports'
 import { formatDate } from '../lib/formatDate'
@@ -19,7 +20,7 @@ function contactHref(contact) {
 
 export default function ReportDetail() {
   const { id } = useParams()
-  const { reports } = useReports()
+  const { reports, updateReport } = useReports()
   const report = reports.find((item) => item.id === id)
 
   if (!report) {
@@ -34,6 +35,7 @@ export default function ReportDetail() {
     )
   }
 
+  const isOwnReport = report.id.startsWith('user-')
   const typeLabel = report.type === 'lost' ? 'Barang Hilang' : 'Barang Ditemukan'
 
   return (
@@ -52,7 +54,19 @@ export default function ReportDetail() {
         <div className="report-detail-info">
           <span className="report-type-label">{typeLabel}</span>
           <h1 className="report-detail-title">{report.title}</h1>
-          <StatusBadge status={report.status} />
+          <StatusBadge status={report.status} key={report.status} />
+
+          {isOwnReport && (
+            <div className="report-own-actions">
+              <Link to={`/laporan/${report.id}/edit`} className="btn btn-secondary btn-sm">
+                Edit Laporan
+              </Link>
+              <StatusActions
+                report={report}
+                onUpdateStatus={(status) => updateReport(report.id, { status })}
+              />
+            </div>
+          )}
 
           <dl className="detail-list">
             <div>
