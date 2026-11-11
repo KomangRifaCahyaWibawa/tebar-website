@@ -3,11 +3,15 @@ import { getCategoryLabel } from '../data/categories'
 import { formatDate } from '../lib/formatDate'
 import StatusBadge from './StatusBadge'
 
-export default function ReportCard({ report }) {
+export default function ReportCard({ report, index = 0 }) {
   const typeLabel = report.type === 'lost' ? 'Barang Hilang' : 'Barang Ditemukan'
 
   return (
-    <Link className="report-card" to={`/laporan/${report.id}`}>
+    <Link
+      className="report-card"
+      to={`/laporan/${report.id}`}
+      style={{ '--appear-delay': `${Math.min(index, 8) * 45}ms` }}
+    >
       <div className="report-card-photo">
         {report.image ? (
           <img src={report.image} alt={`Foto ${report.title}`} loading="lazy" />
