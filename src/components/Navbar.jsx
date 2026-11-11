@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState } from 'react'
-import { Link, NavLink, useLocation } from 'react-router-dom'
+import { useState } from 'react'
+import { Link, NavLink } from 'react-router-dom'
 import LogoTebar from '../assets/logotebar.svg'
-import { scrollToTop } from '../lib/scroll'
+import { useHomeScroll } from '../hooks/useHomeScroll'
+import { useHideOnScroll } from '../hooks/useHideOnScroll'
 
 const navLinks = [
   { to: '/', label: 'Beranda', end: true, isHome: true },
@@ -11,31 +12,18 @@ const navLinks = [
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const location = useLocation()
-  const pendingHomeScrollRef = useRef(false)
   const closeMenu = () => setMenuOpen(false)
+  const handleHomeScroll = useHomeScroll()
+  const scrollHidden = useHideOnScroll()
+  const headerHidden = scrollHidden && !menuOpen
 
   function handleHomeClick(event) {
     closeMenu()
-
-    if (location.pathname === '/') {
-      event.preventDefault()
-      scrollToTop()
-      return
-    }
-
-    pendingHomeScrollRef.current = true
+    handleHomeScroll(event)
   }
 
-  useEffect(() => {
-    if (pendingHomeScrollRef.current && location.pathname === '/') {
-      pendingHomeScrollRef.current = false
-      scrollToTop()
-    }
-  }, [location])
-
   return (
-    <header className="site-header">
+    <header className={`site-header${headerHidden ? ' is-hidden' : ''}`}>
       <div className="container site-header-inner">
         <Link to="/" className="brand" onClick={handleHomeClick}>
           <img src={LogoTebar} alt = "Logo Tebar" className="navbar-logo"></img>
