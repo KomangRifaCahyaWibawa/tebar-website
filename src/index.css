@@ -549,6 +549,61 @@ h3 {
   color: var(--color-muted);
 }
 
+@media (max-width: 600px) {
+  .report-grid {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .report-card {
+    flex-direction: row;
+  }
+
+  .report-card-photo {
+    flex: none;
+    width: 96px;
+    aspect-ratio: 1 / 1;
+    border-bottom: none;
+    border-right: 1px solid var(--color-border);
+  }
+
+  .report-card-body {
+    flex: 1;
+    min-width: 0;
+    gap: 3px;
+    padding: 10px 12px;
+  }
+
+  .report-card-title {
+    font-size: 15px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    overflow: hidden;
+  }
+
+  .report-card-meta {
+    font-size: 13px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .report-card-date {
+    font-size: 12px;
+  }
+
+  .status-badge {
+    font-size: 12px;
+    padding: 2px 8px;
+  }
+
+  .report-card-no-photo {
+    font-size: 12px;
+  }
+}
+
 /* ==========================================================================
    Status badge 
    ========================================================================== */
@@ -632,12 +687,60 @@ h3 {
 /* ==========================================================================
    Halaman daftar laporan 
    ========================================================================== */
+.filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 20px 0 24px;
+}
+
 .filter-row {
   display: flex;
   align-items: center;
   gap: 12px;
   flex-wrap: wrap;
-  margin: 20px 0 24px;
+}
+
+.type-filter {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  gap: 4px;
+  width: 100%;
+  padding: 4px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.type-filter-option {
+  gap: 1;
+  padding: 8px 16px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-muted);
+  cursor: pointer;
+  min-height: 40px;
+}
+
+.type-filter-option:hover {
+  color: var(--color-text);
+  background: var(--color-primary-soft);
+}
+
+.type-filter-option.is-active {
+  background: var(--color-primary);
+  color: #fff;
+}
+
+@media (max-width: 400px) {
+  .type-filter-option {
+    padding: 8px 12px;
+    font-size: 13px;
+  }
 }
 
 .filter-label {
@@ -1125,6 +1228,12 @@ textarea.field-input {
   transition:
     border-color 0.15s ease,
     background-color 0.15s ease;
+}
+
+.type-filter-option {
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
 }
 
 .contact-link {
