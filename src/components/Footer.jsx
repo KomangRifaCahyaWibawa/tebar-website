@@ -1,13 +1,15 @@
-import { Link } from 'react-router-dom'
+import { Link } from "react-router-dom";
+import { useScrollToTopOnNavigate } from "../hooks/useScrollToTopOnNavigate";
 
 const footerLinks = [
-  { to: '/', label: 'Beranda' },
-  { to: '/laporan', label: 'Cari Barang' },
-  { to: '/laporkan', label: 'Laporkan Barang' },
-  { to: '/laporan-saya', label: 'Laporan Saya' },
-]
+  { to: "/", label: "Beranda" },
+  { to: "/laporan", label: "Cari Barang" },
+  { to: "/laporan-saya", label: "Laporan Saya" },
+];
 
 export default function Footer() {
+  const handleLinkClick = useScrollToTopOnNavigate();
+
   return (
     <footer className="site-footer">
       <div className="container site-footer-inner">
@@ -17,7 +19,7 @@ export default function Footer() {
         </div>
         <nav className="site-footer-nav" aria-label="Navigasi footer">
           {footerLinks.map((link) => (
-            <Link key={link.to} to={link.to}>
+            <Link key={link.to} to={link.to} onClick={handleLinkClick(link.to)}>
               {link.label}
             </Link>
           ))}
@@ -27,5 +29,5 @@ export default function Footer() {
         <p>© 2026 TeBar</p>
       </div>
     </footer>
-  )
+  );
 }
