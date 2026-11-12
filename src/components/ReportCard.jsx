@@ -20,7 +20,9 @@ export default function ReportCard({ report, index = 0 }) {
         )}
       </div>
       <div className="report-card-body">
-        <span className="report-type-label">{typeLabel}</span>
+        <span className={`report-type-label ${report.type === 'lost' ? 'is-lost' : 'is-found'}`}>
+          {typeLabel}
+        </span>
         <h3 className="report-card-title">{report.title}</h3>
         <p className="report-card-meta">
           {getCategoryLabel(report.category)} · {report.location}
