@@ -1,5 +1,6 @@
 import { useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import EmptyState from '../components/EmptyState'
 import ReportCard from '../components/ReportCard'
 import SearchBar from '../components/SearchBar'
 import { categories, getCategoryLabel } from '../data/categories'
@@ -93,7 +94,13 @@ export default function ReportList() {
             <button
               key={filter.label}
               type="button"
-              className={`type-filter-option${typeId === filter.value ? ' is-active' : ''}`}
+              className={[
+                'type-filter-option',
+                typeId === filter.value ? 'is-active' : '',
+                filter.value ? `type-${filter.value}` : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
               aria-pressed={typeId === filter.value}
               onClick={() => handleTypeChange(filter.value)}
             >
@@ -113,17 +120,17 @@ export default function ReportList() {
       </div>
 
       {filteredReports.length === 0 ? (
-        <div className="empty-state">
-          <p>
-            <strong>Tidak ada laporan yang ditemukan.</strong>
-          </p>
-          <p>Coba ubah kata kunci pencarian atau hapus beberapa filter, lalu coba lagi.</p>
+        <EmptyState
+          icon="search"
+          title="Tidak ada laporan yang ditemukan."
+          description="Coba ubah kata kunci pencarian atau hapus beberapa filter, lalu coba lagi."
+        >
           {hasActiveFilter && (
             <button type="button" className="btn btn-secondary" onClick={handleResetFilters}>
               Reset Filter
             </button>
           )}
-        </div>
+        </EmptyState>
       ) : (
         <div className="report-grid">
           {filteredReports.map((report, index) => (

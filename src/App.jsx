@@ -1,4 +1,5 @@
 import { Link, Route, Routes, useLocation } from 'react-router-dom'
+import EmptyState from './components/EmptyState'
 import Footer from './components/Footer'
 import Navbar from './components/Navbar'
 import CreateReport from './pages/CreateReport'
@@ -12,11 +13,15 @@ import ReportsProvider from './context/ReportsProvider'
 function NotFoundPage() {
   return (
     <div className="container page">
-      <h1>Halaman tidak ditemukan</h1>
-      <p className="page-subtitle">Alamat yang kamu buka tidak tersedia.</p>
-      <Link to="/" className="btn btn-secondary">
-        Kembali ke Beranda
-      </Link>
+      <EmptyState
+        icon="search"
+        title="Halaman tidak ditemukan."
+        description="Alamat yang kamu buka tidak tersedia."
+      >
+        <Link to="/" className="btn btn-secondary">
+          Kembali ke Beranda
+        </Link>
+      </EmptyState>
     </div>
   )
 }
