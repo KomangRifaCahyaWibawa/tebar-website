@@ -52,7 +52,9 @@ export default function ReportDetail() {
         </div>
 
         <div className="report-detail-info">
-          <span className="report-type-label">{typeLabel}</span>
+          <span className={`report-type-label ${report.type === 'lost' ? 'is-lost' : 'is-found'}`}>
+            {typeLabel}
+          </span>
           <h1 className="report-detail-title">{report.title}</h1>
           <StatusBadge status={report.status} key={report.status} />
 

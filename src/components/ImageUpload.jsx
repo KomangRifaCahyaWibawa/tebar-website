@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import Icon from './Icon'
 import { ACCEPTED_FILE_INPUT, UNREADABLE_MESSAGE, imageFileToDataUrl, validateImageFile } from '../lib/image'
 
 export default function ImageUpload({ value, onChange }) {
@@ -47,6 +48,9 @@ export default function ImageUpload({ value, onChange }) {
         </div>
       ) : (
         <div className="image-upload-empty">
+          <span className="image-upload-empty-icon" aria-hidden="true">
+            <Icon name="image" size={22} />
+          </span>
           <button type="button" className="btn btn-secondary" onClick={() => inputRef.current?.click()}>
             Pilih Foto
           </button>
