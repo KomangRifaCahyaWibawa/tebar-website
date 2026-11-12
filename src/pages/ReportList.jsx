@@ -1,15 +1,24 @@
 import { useMemo } from 'react'
-import { Link, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
+import EmptyState from '../components/EmptyState'
 import ReportCard from '../components/ReportCard'
 import SearchBar from '../components/SearchBar'
 import { categories, getCategoryLabel } from '../data/categories'
 import { useReports } from '../context/useReports'
+
+const typeFilters = [
+  { value: '', label: 'Semua' },
+  { value: 'lost', label: 'Barang Hilang' },
+  { value: 'found', label: 'Barang Ditemukan' },
+]
 
 export default function ReportList() {
   const { reports } = useReports()
   const [searchParams, setSearchParams] = useSearchParams()
 
   const query = searchParams.get('q') ?? ''
+  const rawType = searchParams.get('jenis') ?? ''
+  const typeId = rawType === 'lost' || rawType === 'found' ? rawType : ''
   const categoryId = searchParams.get('kategori') ?? ''
 
   const filteredReports = useMemo(() => {
@@ -20,32 +29,39 @@ export default function ReportList() {
         || report.location.toLowerCase().includes(keyword)
         || report.description.toLowerCase().includes(keyword)
         || getCategoryLabel(report.category).toLowerCase().includes(keyword)
+      const matchesType = !typeId || report.type === typeId
       const matchesCategory = !categoryId || report.category === categoryId
-      return matchesKeyword && matchesCategory
+      return matchesKeyword && matchesType && matchesCategory
     })
-  }, [reports, query, categoryId])
+  }, [reports, query, typeId, categoryId])
 
-  function handleSearch(keyword) {
+  function setParam(key, value) {
     const nextParams = new URLSearchParams(searchParams)
-    if (keyword) {
-      nextParams.set('q', keyword)
+    if (value) {
+      nextParams.set(key, value)
     } else {
-      nextParams.delete('q')
+      nextParams.delete(key)
     }
     setSearchParams(nextParams)
+  }
+
+  function handleSearch(keyword) {
+    setParam('q', keyword)
+  }
+
+  function handleTypeChange(type) {
+    setParam('jenis', type)
   }
 
   function handleCategoryChange(event) {
-    const nextParams = new URLSearchParams(searchParams)
-    if (event.target.value) {
-      nextParams.set('kategori', event.target.value)
-    } else {
-      nextParams.delete('kategori')
-    }
-    setSearchParams(nextParams)
+    setParam('kategori', event.target.value)
   }
 
-  const hasActiveFilter = query !== '' || categoryId !== ''
+  function handleResetFilters() {
+    setSearchParams(new URLSearchParams())
+  }
+
+  const hasActiveFilter = query !== '' || typeId !== '' || categoryId !== ''
 
   return (
     <div className="container page">
@@ -54,40 +70,67 @@ export default function ReportList() {
 
       <SearchBar key={query} initialQuery={query} onSubmit={handleSearch} />
 
-      <div className="filter-row">
-        <label htmlFor="filter-kategori" className="filter-label">
-          Kategori
-        </label>
-        <select
-          id="filter-kategori"
-          className="field-input filter-select"
-          value={categoryId}
-          onChange={handleCategoryChange}
-        >
-          <option value="">Semua kategori</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.label}
-            </option>
+      <div className="filter-bar">
+
+        <div className="filter-row">
+          <label htmlFor="filter-kategori" className="filter-label">
+            Kategori
+          </label>
+          <select
+            id="filter-kategori"
+            className="field-input filter-select"
+            value={categoryId}
+            onChange={handleCategoryChange}
+          >
+            <option value="">Semua kategori</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.label}
+              </option>
+            ))}
+          </select>
+          <div className="type-filter" role="group" aria-label="Filter jenis laporan">
+          {typeFilters.map((filter) => (
+            <button
+              key={filter.label}
+              type="button"
+              className={[
+                'type-filter-option',
+                typeId === filter.value ? 'is-active' : '',
+                filter.value ? `type-${filter.value}` : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+              aria-pressed={typeId === filter.value}
+              onClick={() => handleTypeChange(filter.value)}
+            >
+              {filter.label}
+            </button>
           ))}
-        </select>
-        <p className="filter-count" aria-live="polite">
-          {filteredReports.length} laporan
-        </p>
+        </div>
+          {hasActiveFilter && (
+            <button type="button" className="btn btn-secondary btn-sm" onClick={handleResetFilters}>
+              Reset Filter
+            </button>
+          )}
+          <p className="filter-count" aria-live="polite">
+            {filteredReports.length} laporan
+          </p>
+        </div>
       </div>
 
       {filteredReports.length === 0 ? (
-        <div className="empty-state">
-          <p>
-            <strong>Tidak ada laporan yang cocok.</strong>
-          </p>
-          <p>Coba kata kunci lain atau hapus filter kategori.</p>
+        <EmptyState
+          icon="search"
+          title="Tidak ada laporan yang ditemukan."
+          description="Coba ubah kata kunci pencarian atau hapus beberapa filter, lalu coba lagi."
+        >
           {hasActiveFilter && (
-            <Link to="/laporan" className="btn btn-secondary">
-              Tampilkan semua laporan
-            </Link>
+            <button type="button" className="btn btn-secondary" onClick={handleResetFilters}>
+              Reset Filter
+            </button>
           )}
-        </div>
+        </EmptyState>
       ) : (
         <div className="report-grid">
           {filteredReports.map((report, index) => (

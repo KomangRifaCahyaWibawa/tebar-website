@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import Icon from './Icon'
 
 export default function SearchBar({ initialQuery = '', onSubmit }) {
   const [query, setQuery] = useState(initialQuery)
@@ -22,6 +23,9 @@ export default function SearchBar({ initialQuery = '', onSubmit }) {
       <label htmlFor="search-input" className="sr-only">
         Cari laporan
       </label>
+      <span className="search-bar-icon" aria-hidden="true">
+        <Icon name="search" size={18} />
+      </span>
       <input
         id="search-input"
         type="search"
