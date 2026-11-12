@@ -31,35 +31,42 @@ export default function ImageUpload({ value, onChange }) {
   return (
     <div className="image-upload">
       <span className="field-label">
-        Foto Barang <span className="field-optional">opsional</span>
+        Foto barang <span className="field-optional">opsional</span>
       </span>
 
       {value ? (
         <div className="image-upload-preview">
           <img src={value} alt="Pratinjau foto barang" />
           <div className="image-upload-actions">
-            <button type="button" className="btn btn-secondary" onClick={() => inputRef.current?.click()}>
-              Ganti Foto
+            <button
+              type="button"
+              className="btn btn-secondary btn-sm"
+              onClick={() => inputRef.current?.click()}
+            >
+              Ganti foto
             </button>
-            <button type="button" className="btn btn-danger" onClick={handleRemove}>
-              Hapus
+            <button type="button" className="btn btn-danger btn-sm" onClick={handleRemove}>
+              Hapus foto
             </button>
           </div>
         </div>
       ) : (
-        <div className="image-upload-empty">
-          <span className="image-upload-empty-icon" aria-hidden="true">
-            <Icon name="image" size={22} />
+        <button
+          type="button"
+          className="image-upload-drop"
+          onClick={() => inputRef.current?.click()}
+        >
+          <span className="image-upload-drop-icon" aria-hidden="true">
+            <Icon name="image" size={20} />
           </span>
-          <button type="button" className="btn btn-secondary" onClick={() => inputRef.current?.click()}>
-            Pilih Foto
-          </button>
-        </div>
+          <span className="image-upload-drop-title">Pilih foto barang</span>
+          <span className="image-upload-drop-hint">
+            JPG, JPEG, atau PNG · maksimal 5 MB
+          </span>
+        </button>
       )}
 
-      <p className="field-help">
-        Tambahkan foto barang agar lebih mudah dikenali. JPG, JPEG, atau PNG — maksimal 5 MB.
-      </p>
+      <p className="field-help">Foto disimpan di perangkat ini bersama laporanmu.</p>
       {error && (
         <p className="field-error" role="alert">
           {error}

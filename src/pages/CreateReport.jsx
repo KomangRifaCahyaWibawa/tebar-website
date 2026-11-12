@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 import ReportForm from '../components/ReportForm'
+import ReportTips from '../components/ReportTips'
 import { useReports } from '../context/useReports'
 
 export default function CreateReport() {
@@ -19,12 +20,19 @@ export default function CreateReport() {
 
   return (
     <div className="container page">
-      <h1>Laporkan Barang</h1>
-      <p className="page-subtitle">
-        Bagikan informasi barang yang kamu hilang atau kamu temukan agar bisa kembali ke pemiliknya.
-      </p>
+      <div className="page-head">
+        <p className="eyebrow">Laporan baru</p>
+        <h1>Laporkan barang</h1>
+        <p className="page-lede">
+          Isi informasi secukupnya. Laporan langsung tampil di papan dan bisa kamu ubah kapan
+          saja.
+        </p>
+      </div>
 
-      <ReportForm submitLabel="Kirim Laporan" onSubmit={handleSubmit} />
+      <div className="form-layout">
+        <ReportForm submitLabel="Kirim laporan" onSubmit={handleSubmit} />
+        <ReportTips />
+      </div>
     </div>
   )
 }

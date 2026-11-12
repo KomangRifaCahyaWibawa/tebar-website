@@ -11,7 +11,7 @@ const contactPlatforms = [
 
 export default function ReportForm({
   initialReport,
-  submitLabel = 'Kirim Laporan',
+  submitLabel = 'Kirim laporan',
   onSubmit,
   lockType = false,
 }) {
@@ -51,13 +51,17 @@ export default function ReportForm({
 
   return (
     <form className="report-form" onSubmit={handleSubmit}>
-      <h2 className="form-section-title">Informasi Barang</h2>
+      <h2 className="form-section-title">
+        <span className="form-section-num">01</span>
+        <span>Informasi barang</span>
+      </h2>
 
-      <div className="field">
-        <span className="field-label">Jenis Laporan</span>
+      <fieldset className="radio-fieldset">
+        <legend className="field-label">Jenis laporan</legend>
         <div className="radio-row">
-          <label className={`radio-option${form.type === 'lost' ? ' is-active' : ''}`}>
+          <label className={`radio-option is-lost${form.type === 'lost' ? ' is-active' : ''}`}>
             <input
+              className="radio-input"
               type="radio"
               name="type"
               value="lost"
@@ -65,10 +69,16 @@ export default function ReportForm({
               onChange={handleFormChange}
               disabled={lockType}
             />
-            Barang Hilang
+            <span className="radio-dot" aria-hidden="true" />
+            <span className="radio-text">
+              <span className="radio-title">Barang hilang</span>
+              <span className="radio-desc">Saya kehilangan barang ini.</span>
+            </span>
           </label>
-          <label className={`radio-option${form.type === 'found' ? ' is-active' : ''}`}>
+
+          <label className={`radio-option is-found${form.type === 'found' ? ' is-active' : ''}`}>
             <input
+              className="radio-input"
               type="radio"
               name="type"
               value="found"
@@ -76,17 +86,21 @@ export default function ReportForm({
               onChange={handleFormChange}
               disabled={lockType}
             />
-            Barang Ditemukan
+            <span className="radio-dot" aria-hidden="true" />
+            <span className="radio-text">
+              <span className="radio-title">Barang ditemukan</span>
+              <span className="radio-desc">Saya menemukan barang ini.</span>
+            </span>
           </label>
         </div>
         {lockType && (
           <p className="field-help">Jenis laporan tidak dapat diubah saat mengedit.</p>
         )}
-      </div>
+      </fieldset>
 
       <div className="field">
         <label className="field-label" htmlFor="report-title">
-          Nama Barang
+          Nama barang
         </label>
         <input
           id="report-title"
@@ -95,7 +109,7 @@ export default function ReportForm({
           value={form.title}
           onChange={handleFormChange}
           required
-          placeholder="contoh: Dompet Kulit Hitam"
+          placeholder="Contoh: Dompet kulit hitam"
         />
       </div>
 
@@ -149,7 +163,7 @@ export default function ReportForm({
           value={form.location}
           onChange={handleFormChange}
           required
-          placeholder="contoh: Universitas Udayana"
+          placeholder="Contoh: Universitas Udayana"
         />
       </div>
 
@@ -168,10 +182,17 @@ export default function ReportForm({
         />
       </div>
 
-      <h2 className="form-section-title">Foto Barang</h2>
+      <h2 className="form-section-title">
+        <span className="form-section-num">02</span>
+        <span>Foto barang</span>
+      </h2>
       <ImageUpload value={image} onChange={setImage} />
 
-      <h2 className="form-section-title">Kontak Pelapor</h2>
+      <h2 className="form-section-title">
+        <span className="form-section-num">03</span>
+        <span>Kontak pelapor</span>
+      </h2>
+
       <div className="field-pair">
         <div className="field">
           <label className="field-label" htmlFor="report-contact-platform">
@@ -204,17 +225,23 @@ export default function ReportForm({
             required
             placeholder={
               form.contactPlatform === 'email'
-                ? 'contoh: nama@example.com'
-                : 'contoh: +62 812-3456-7890'
+                ? 'Contoh: nama@example.com'
+                : 'Contoh: +62 812-3456-7890'
             }
           />
         </div>
       </div>
+      <p className="field-help">
+        Kontak akan tampil di halaman laporan agar orang bisa menghubungimu.
+      </p>
 
       <div className="form-actions">
         <button type="submit" className="btn btn-primary">
           {submitLabel}
         </button>
+        <p className="form-actions-note">
+          Laporan bisa diedit kapan saja dari Laporan Saya.
+        </p>
       </div>
     </form>
   )

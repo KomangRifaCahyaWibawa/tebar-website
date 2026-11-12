@@ -29,11 +29,14 @@ export default function SearchBar({ initialQuery = '', onSubmit }) {
       <input
         id="search-input"
         type="search"
-        placeholder="Cari barang, lokasi, atau kategori..."
+        placeholder="Cari barang atau lokasi"
         value={query}
         onChange={(event) => setQuery(event.target.value)}
       />
-      <button type="submit">Cari</button>
+      <button type="submit" aria-label="Cari">
+        <span className="search-submit-label">Cari</span>
+        <Icon name="arrow-right" size={16} className="icon search-submit-icon" />
+      </button>
     </form>
   )
 }

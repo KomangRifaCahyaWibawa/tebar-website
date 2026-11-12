@@ -32,8 +32,11 @@ export default function App() {
   return (
     <ReportsProvider>
       <div className="app-shell">
+        <a className="skip-link" href="#main">
+          Lewati ke konten
+        </a>
         <Navbar />
-        <main className="site-main">
+        <main id="main" className="site-main" tabIndex={-1}>
           <div className="page-transition" key={location.pathname}>
             <Routes>
               <Route path="/" element={<Home />} />
