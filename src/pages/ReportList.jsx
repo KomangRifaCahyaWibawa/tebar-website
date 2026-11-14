@@ -7,9 +7,9 @@ import { categories, getCategoryLabel } from '../data/categories'
 import { useReports } from '../context/useReports'
 
 const typeFilters = [
-  { value: '', label: 'Semua' },
-  { value: 'lost', label: 'Barang Hilang' },
-  { value: 'found', label: 'Barang Ditemukan' },
+  { value: '', label: 'Semua', ariaLabel: 'Tampilkan semua laporan' },
+  { value: 'lost', label: 'Hilang', ariaLabel: 'Tampilkan barang hilang' },
+  { value: 'found', label: 'Temuan', ariaLabel: 'Tampilkan barang temuan' },
 ]
 
 export default function ReportList() {
@@ -65,31 +65,21 @@ export default function ReportList() {
 
   return (
     <div className="container page">
-      <h1>Cari Barang</h1>
-      <p className="page-subtitle">Cari laporan berdasarkan nama barang, lokasi, atau kategori.</p>
+      <div className="page-head">
+        <p className="eyebrow">Direktori laporan</p>
+        <h1>Cari barang</h1>
+        <p className="page-lede">
+          Telusuri laporan barang hilang dan temuan dari komunitas. Gunakan kata kunci, jenis,
+          atau kategori.
+        </p>
+      </div>
 
-      <SearchBar key={query} initialQuery={query} onSubmit={handleSearch} />
+      <div className="list-search">
+        <SearchBar key={query} initialQuery={query} onSubmit={handleSearch} />
+      </div>
 
       <div className="filter-bar">
-
-        <div className="filter-row">
-          <label htmlFor="filter-kategori" className="filter-label">
-            Kategori
-          </label>
-          <select
-            id="filter-kategori"
-            className="field-input filter-select"
-            value={categoryId}
-            onChange={handleCategoryChange}
-          >
-            <option value="">Semua kategori</option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.label}
-              </option>
-            ))}
-          </select>
-          <div className="type-filter" role="group" aria-label="Filter jenis laporan">
+        <div className="type-filter" role="group" aria-label="Filter jenis laporan">
           {typeFilters.map((filter) => (
             <button
               key={filter.label}
@@ -101,6 +91,7 @@ export default function ReportList() {
               ]
                 .filter(Boolean)
                 .join(' ')}
+              aria-label={filter.ariaLabel}
               aria-pressed={typeId === filter.value}
               onClick={() => handleTypeChange(filter.value)}
             >
@@ -108,33 +99,55 @@ export default function ReportList() {
             </button>
           ))}
         </div>
-          {hasActiveFilter && (
-            <button type="button" className="btn btn-secondary btn-sm" onClick={handleResetFilters}>
-              Reset Filter
-            </button>
-          )}
-          <p className="filter-count" aria-live="polite">
-            {filteredReports.length} laporan
-          </p>
+
+        <div className="filter-select-wrap">
+          <label htmlFor="filter-kategori" className="sr-only">
+            Kategori
+          </label>
+          <select
+            id="filter-kategori"
+            className="filter-select"
+            value={categoryId}
+            onChange={handleCategoryChange}
+          >
+            <option value="">Semua kategori</option>
+            {categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.label}
+              </option>
+            ))}
+          </select>
         </div>
+
+        {hasActiveFilter && (
+          <button type="button" className="filter-reset" onClick={handleResetFilters}>
+            Reset filter
+          </button>
+        )}
+
+        <p className="filter-count" aria-live="polite">
+          <strong>{filteredReports.length}</strong> laporan
+        </p>
       </div>
+
+      <h2 className="sr-only">Hasil pencarian</h2>
 
       {filteredReports.length === 0 ? (
         <EmptyState
           icon="search"
-          title="Tidak ada laporan yang ditemukan."
-          description="Coba ubah kata kunci pencarian atau hapus beberapa filter, lalu coba lagi."
+          title="Tidak ada laporan yang ditemukan"
+          description="Coba ubah kata kunci atau hapus beberapa filter, lalu cari lagi."
         >
           {hasActiveFilter && (
             <button type="button" className="btn btn-secondary" onClick={handleResetFilters}>
-              Reset Filter
+              Reset filter
             </button>
           )}
         </EmptyState>
       ) : (
         <div className="report-grid">
-          {filteredReports.map((report, index) => (
-            <ReportCard key={report.id} report={report} index={index} />
+          {filteredReports.map((report) => (
+            <ReportCard key={report.id} report={report} />
           ))}
         </div>
       )}

@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import ConfirmDialog from '../components/ConfirmDialog'
 import EmptyState from '../components/EmptyState'
+import Icon from '../components/Icon'
 import StatusBadge from '../components/StatusBadge'
 import StatusActions from '../components/StatusActions'
 import { getCategoryLabel } from '../data/categories'
@@ -20,50 +21,86 @@ export default function MyReports() {
 
   return (
     <div className="container page">
-      <h1>Laporan Saya</h1>
-      <p className="page-subtitle">Laporan yang kamu buat dari perangkat ini.</p>
+      <div className="page-head page-head-row">
+        <div>
+          <p className="eyebrow">Arsip di perangkat ini</p>
+          <h1>Laporan saya</h1>
+          <p className="page-lede">
+            Laporan yang kamu buat dari perangkat ini. Status, isi, dan fotonya bisa diperbarui
+            kapan saja.
+          </p>
+        </div>
+        {myReports.length > 0 && (
+          <Link to="/laporkan" className="btn btn-primary">
+            Buat laporan
+          </Link>
+        )}
+      </div>
 
       {myReports.length === 0 ? (
         <EmptyState
           icon="inbox"
-          title="Kamu belum membuat laporan."
+          title="Kamu belum membuat laporan"
           description="Laporan yang kamu buat akan tersimpan di perangkat ini."
         >
           <Link to="/laporkan" className="btn btn-primary">
-            Laporkan Barang
+            Laporkan barang
           </Link>
         </EmptyState>
       ) : (
         <ul className="my-report-list">
           {myReports.map((report) => (
             <li key={report.id} className="my-report-row">
+              <div className="my-report-thumb" aria-hidden="true">
+                {report.image ? (
+                  <img src={report.image} alt="" loading="lazy" decoding="async" />
+                ) : (
+                  <Icon name="image" size={18} />
+                )}
+              </div>
+
               <div className="my-report-info">
-                <span className={`report-type-label ${report.type === 'lost' ? 'is-lost' : 'is-found'}`}>
-                  {report.type === 'lost' ? 'Barang Hilang' : 'Barang Ditemukan'}
-                </span>
+                <div className="my-report-kicker">
+                  <span
+                    className={`report-type-label ${
+                      report.type === 'lost' ? 'is-lost' : 'is-found'
+                    }`}
+                  >
+                    {report.type === 'lost' ? 'Barang hilang' : 'Barang ditemukan'}
+                  </span>
+                  <StatusBadge status={report.status} key={report.status} />
+                </div>
                 <Link to={`/laporan/${report.id}`} className="my-report-title">
                   {report.title}
                 </Link>
                 <p className="my-report-meta">
-                  {getCategoryLabel(report.category)} · {report.location} · {formatDate(report.date)}
+                  {getCategoryLabel(report.category)} · {report.location} ·{' '}
+                  {formatDate(report.date)}
                 </p>
               </div>
+
               <div className="my-report-actions">
-                <StatusBadge status={report.status} key={report.status} />
                 <StatusActions
                   report={report}
                   onUpdateStatus={(status) => updateReport(report.id, { status })}
                 />
-                <Link to={`/laporan/${report.id}/edit`} className="btn btn-secondary btn-sm">
-                  Edit Laporan
-                </Link>
-                <button
-                  type="button"
-                  className="btn btn-danger"
-                  onClick={() => setReportToRemove(report)}
-                >
-                  Hapus
-                </button>
+                <div className="my-report-manage">
+                  <Link
+                    to={`/laporan/${report.id}/edit`}
+                    className="btn btn-secondary btn-sm"
+                    aria-label={`Edit laporan ${report.title}`}
+                  >
+                    Edit
+                  </Link>
+                  <button
+                    type="button"
+                    className="btn btn-danger btn-sm"
+                    aria-label={`Hapus laporan ${report.title}`}
+                    onClick={() => setReportToRemove(report)}
+                  >
+                    Hapus
+                  </button>
+                </div>
               </div>
             </li>
           ))}
